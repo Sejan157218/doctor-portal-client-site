@@ -14,7 +14,7 @@ const Appointmentbg = {
 }
 
 
-const AppoinmentBg = () => {
+const AppointmentBg = () => {
     return (
 
         <Box style={Appointmentbg} sx={{ flexGrow: 1 }}>
@@ -31,7 +31,7 @@ const AppoinmentBg = () => {
                             <Typography sx={{ color: '#ffff', my: 2, fontWeight: 900 }} variant="h3">
                                 Make an appointment Today
                             </Typography>
-                            <Typography sx={{ color: '#ffff',fontSize :13,fontWeight: 300 }} variant="h6">
+                            <Typography sx={{ color: '#ffff', fontSize: 13, fontWeight: 300 }} variant="h6">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita quibusdam, libero illum omnis porro quisquam rerum cum. Enim, nihil ipsam.
                             </Typography>
                             <Button sx={{ color: '#ffff', my: 2, backgroundImage: "linear-gradient(to right,#18D2B5, #11CFE3)", padding: "6px 22px", mt: 5 }} >Learn More</Button>
@@ -44,4 +44,4 @@ const AppoinmentBg = () => {
     );
 };
 
-export default AppoinmentBg;
+export default AppointmentBg;

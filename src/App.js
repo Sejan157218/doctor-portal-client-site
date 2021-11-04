@@ -9,11 +9,14 @@ import {
 import './App.css';
 import Home from './Pages/Home/Home/Home';
 import About from './Pages/Home/About/About';
+import Appointment from './Pages/Appointment/Appoinment/Appoinment';
+
+
 
 
 function App() {
   return (
-    <div >
+    <div className="App">
       <Router>
         <Switch>
           <Route exact path="/">
@@ -24,6 +27,9 @@ function App() {
           </Route>
           <Route path="/about">
             <About />
+          </Route>
+          <Route path="/appointment">
+            <Appointment />
           </Route>
         </Switch>
       </Router>
