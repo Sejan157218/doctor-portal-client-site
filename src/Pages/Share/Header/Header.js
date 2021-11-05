@@ -25,8 +25,8 @@ const Header = () => {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         News
                     </Typography>
-                   <Link to="/appointment"> <Button color="inherit">Appointment</Button></Link>
-                    <Button color="inherit">Login</Button>
+                    <Link to="/appointment"> <Button color="inherit">Appointment</Button></Link>
+                    <Link to="/login"><Button color="inherit">Login</Button></Link>
                 </Toolbar>
             </AppBar>
         </Box>
