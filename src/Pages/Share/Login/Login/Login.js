@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
-import { Button, Container, TextField, Typography } from '@mui/material';
+import { Alert, Button, CircularProgress, Container, TextField, Typography } from '@mui/material';
 import loginimg from '../../../../images/login.png';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation, useHistory } from 'react-router-dom';
+import useAuth from '../../../hook/useAuth';
 const Login = () => {
-    const [loginData, setLoginData] = useState({})
+    const [loginData, setLoginData] = useState({});
+    const location = useLocation();
+    const history = useHistory()
 
+    const { user, handlerLoginWithEmail, isLoading, authError } = useAuth();
     const handlerToOnchange = e => {
         const field = e.target.name;
         const value = e.target.value;
@@ -16,9 +20,8 @@ const Login = () => {
 
     }
     const handlerLoginSubmit = e => {
-        console.log(loginData);
-        alert('hhdddddhhh');
-        e.preventDefault()
+        handlerLoginWithEmail(loginData.email, loginData.password, location, history);
+        e.preventDefault();
     }
     return (
         <Container>
@@ -34,6 +37,18 @@ const Login = () => {
 
                         <NavLink to="/register" style={{ textDecoration: 'none' }}> <Button type="text" sx={{ color: "#11CFE3", width: '75%', m: 1, fontSize: '14px' }} >NEW USER? PLEASE REGISTER</Button></NavLink>
                     </form>
+                    {isLoading && <CircularProgress />}
+                    {
+                        user?.email && <Alert severity="success">
+
+                            Login <strong>Successfully</strong>
+                        </Alert>
+                    }
+                    {
+                        authError && <Alert severity="success">
+                            {authError}
+                        </Alert>
+                    }
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <img style={{ width: "100%" }} src={loginimg} alt="" />

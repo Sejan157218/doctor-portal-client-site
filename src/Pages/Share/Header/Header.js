@@ -6,9 +6,11 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import useAuth from '../../hook/useAuth';
 
 const Header = () => {
+    const { user, logout } = useAuth()
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -25,8 +27,10 @@ const Header = () => {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         News
                     </Typography>
-                    <Link to="/appointment"> <Button color="inherit">Appointment</Button></Link>
-                    <Link to="/login"><Button color="inherit">Login</Button></Link>
+                    <NavLink style={{ textDecoration: "none", color: "#ffff" }} to="/appointment"> <Button color="inherit">Appointment</Button></NavLink>
+                    {
+                        user?.email ? <Button onClick={logout} style={{ textDecoration: "none", color: "#ffff" }} color="inherit">LogOut</Button> : <NavLink style={{ textDecoration: "none", color: "#ffff" }} to="/login"><Button color="inherit">Login</Button></NavLink>
+                    }
                 </Toolbar>
             </AppBar>
         </Box>
