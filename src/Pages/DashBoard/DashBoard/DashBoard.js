@@ -15,17 +15,28 @@ import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Button, Grid } from '@mui/material';
-import Calendar from '../../Share/Calendar/Calendar';
-import AppoinmentsList from '../AppoinmentsList/AppoinmentsList';
+import { Button } from '@mui/material';
+
 import { NavLink } from 'react-router-dom';
+import {
+    Switch,
+    Route,
+    useRouteMatch
+} from "react-router-dom";
+import DashBoardHome from '../DashBoardHome/DashBoardHome';
+import MakeDoctor from '../MakeDoctor/MakeDoctor';
+import AddDoctor from '../AddDoctor/AddDoctor';
+import useAuth from '../../hook/useAuth';
 
 const drawerWidth = 240;
 
 function DashBoard(props) {
+    const { isAdmin } = useAuth()
     const [date, setDate] = React.useState(new Date())
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
+
+    let { path, url } = useRouteMatch();
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -34,7 +45,14 @@ function DashBoard(props) {
     const drawer = (
         <div>
             <Toolbar />
-            <NavLink style={{ textDecoration: "none", color: "" }} to="/appointment"> <Button color="inherit">Appointment</Button></NavLink>
+            <NavLink style={{ textDecoration: "none", color: "", display: "block" }} to="/appointment"> <Button color="inherit">Appointment</Button></NavLink>
+            <NavLink style={{ textDecoration: "none", color: "", display: "block" }} to={`${url}`}> <Button color="inherit">Dashboard</Button></NavLink>
+            {
+                isAdmin && <Box>
+                    <NavLink style={{ textDecoration: "none", color: "", display: "block" }} to={`${url}/makeadmin`}> <Button color="inherit">Make Admin</Button></NavLink>
+                    <NavLink style={{ textDecoration: "none", color: "", display: "block" }} to={`${url}/adddoctor`}> <Button color="inherit">Add Doctor</Button></NavLink>
+                </Box>
+            }
             <Divider />
             <List>
                 {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
@@ -114,24 +132,22 @@ function DashBoard(props) {
             >
                 <Toolbar />
                 <Typography paragraph>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={5}>
-                            <Calendar
-                                date={date}
-                                setDate={setDate}
-                            ></Calendar>
-                        </Grid>
-                        <Grid item xs={12} sm={7}>
-                            <AppoinmentsList
-                                date={date}
-                            ></AppoinmentsList>
-                        </Grid>
+                    <Switch>
+                        <Route exact path={path}>
+                            <DashBoardHome date={date} setDate={setDate} />
+                        </Route>
+                        <Route path={`${path}/makeadmin`}>
+                            <MakeDoctor />
+                        </Route>
+                        <Route path={`${path}/adddoctor`}>
+                            <AddDoctor />
+                        </Route>
+                    </Switch>
 
-                    </Grid>
                 </Typography>
 
             </Box>
-        </Box>
+        </Box >
     );
 }
 

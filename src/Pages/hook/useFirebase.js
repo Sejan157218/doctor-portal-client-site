@@ -8,6 +8,7 @@ const useFirebase = () => {
     const [user, setUser] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [authError, setAuthError] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false)
 
     const auth = getAuth();
     const googleProvider = new GoogleAuthProvider();
@@ -90,6 +91,13 @@ const useFirebase = () => {
             .then(data => console.log(data))
     }
 
+    // is Admin
+    useEffect(() => {
+        fetch(`http://localhost:9000/users/${user?.email}`)
+            .then(res => res.json())
+            .then(data => setIsAdmin(data.admin))
+    }, [user?.email])
+
     // onAuthStateChanged
     useEffect(() => {
         const unsubscribed = onAuthStateChanged(auth, (user) => {
@@ -111,6 +119,7 @@ const useFirebase = () => {
         handlerLoginWithEmail,
         handlerToGoogleLogin,
         logout,
+        isAdmin,
         authError,
         isLoading,
     }
