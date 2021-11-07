@@ -29,7 +29,13 @@ const Header = () => {
                     </Typography>
                     <NavLink style={{ textDecoration: "none", color: "#ffff" }} to="/appointment"> <Button color="inherit">Appointment</Button></NavLink>
                     {
-                        user?.email ? <Button onClick={logout} style={{ textDecoration: "none", color: "#ffff" }} color="inherit">LogOut</Button> : <NavLink style={{ textDecoration: "none", color: "#ffff" }} to="/login"><Button color="inherit">Login</Button></NavLink>
+                        user?.email ?
+                            <>
+                                <NavLink style={{ textDecoration: "none", color: "#ffff" }} to="/dashboard"><Button color="inherit">Dashboard</Button></NavLink>
+                                <Button onClick={logout} style={{ textDecoration: "none", color: "#ffff" }} color="inherit">LogOut</Button>
+                            </>
+                            :
+                            <NavLink style={{ textDecoration: "none", color: "#ffff" }} to="/login"><Button color="inherit">Login</Button></NavLink>
                     }
                 </Toolbar>
             </AppBar>

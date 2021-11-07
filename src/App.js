@@ -14,6 +14,7 @@ import Login from './Pages/Share/Login/Login/Login';
 import Register from './Pages/Share/Login/Register/Register';
 import AuthProvider from './Context/AuthProvider';
 import PrivateRoute from './Pages/PrivateRoute/PrivateRoute';
+import DashBoard from './Pages/DashBoard/DashBoard/DashBoard';
 
 
 function App() {
@@ -39,6 +40,9 @@ function App() {
             </Route>
             <Route path="/register">
               <Register />
+            </Route>
+            <Route path="/dashboard">
+              <DashBoard />
             </Route>
           </Switch>
         </Router>

@@ -7,23 +7,25 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import useAuth from '../../../hook/useAuth';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useHistory } from 'react-router-dom';
 const Register = () => {
     const { user, handlerRegisterToEmail, isLoading, authError } = useAuth();
+    const history =useHistory()
     const [loginData, setLoginData] = useState({});
 
-    const handlerToOnchange = e => {
+    const handlerToBlur = e => {
         const field = e.target.name;
         const value = e.target.value;
         const newLoginData = { ...loginData };
         newLoginData[field] = value;
         setLoginData(newLoginData);
     };
-    const handlerLoginSubmit = e => {
+    const handlerRegisterSubmit = e => {
         if (loginData.password !== loginData.password2) {
             alert('Your password did not match')
             return;
         }
-        handlerRegisterToEmail(loginData.email, loginData.password);
+        handlerRegisterToEmail(loginData.email, loginData.password,loginData.name,history);
         e.preventDefault();
     };
 
@@ -36,10 +38,11 @@ const Register = () => {
                         <Typography variant="body1" component="div" sx={{ flexGrow: 1 }}>
                             REGISTER
                         </Typography>
-                        {!isLoading && <form onSubmit={handlerLoginSubmit}>
-                            <TextField onChange={handlerToOnchange} sx={{ width: '75%', m: 1 }} id="standard-basic" name="email" label="Your Email" variant="standard" />
-                            <TextField onChange={handlerToOnchange} sx={{ width: '75%', m: 1 }} id="standard-basic" name="password" type="password" label="Password" variant="standard" />
-                            <TextField onChange={handlerToOnchange} sx={{ width: '75%', m: 1 }} id="standard-basic" name="password2" type="password" label="Re-type Your Password" variant="standard" />
+                        {!isLoading && <form onSubmit={handlerRegisterSubmit}>
+                        <TextField onBlur={handlerToBlur} sx={{ width: '75%', m: 1 }} id="standard-basic" name="name" label="Your Name" variant="standard" />
+                            <TextField onBlur={handlerToBlur} sx={{ width: '75%', m: 1 }} id="standard-basic" name="email" label="Your Email" variant="standard" />
+                            <TextField onBlur={handlerToBlur} sx={{ width: '75%', m: 1 }} id="standard-basic" name="password" type="password" label="Password" variant="standard" />
+                            <TextField onBlur={handlerToBlur} sx={{ width: '75%', m: 1 }} id="standard-basic" name="password2" type="password" label="Re-type Your Password" variant="standard" />
                             <Button type="submit" sx={{ color: '#ffff', backgroundImage: "linear-gradient(to right,#18D2B5, #11CFE3)", padding: "6px 22px", width: '75%', m: 1 }} >REGISTER</Button>
                             <NavLink to="/login" style={{ textDecoration: 'none' }}> <Button type="text" sx={{ width: '75%', m: 1, color: "#11CFE3" }} >ALREADY REGISTERED? PLEASE LOGIN</Button></NavLink>
                         </form>}

@@ -9,8 +9,8 @@ const Login = () => {
     const location = useLocation();
     const history = useHistory()
 
-    const { user, handlerLoginWithEmail, isLoading, authError } = useAuth();
-    const handlerToOnchange = e => {
+    const { user, handlerLoginWithEmail, isLoading, authError, handlerToGoogleLogin } = useAuth();
+    const handlerToBlur = e => {
         const field = e.target.name;
         const value = e.target.value;
         const newLoginData = { ...loginData };
@@ -23,6 +23,10 @@ const Login = () => {
         handlerLoginWithEmail(loginData.email, loginData.password, location, history);
         e.preventDefault();
     }
+
+    const handlerGooglelogin = () => {
+        handlerToGoogleLogin(location, history)
+    }
     return (
         <Container>
             <Grid container spacing={2}>
@@ -31,12 +35,13 @@ const Login = () => {
                         LOGIN
                     </Typography>
                     <form onSubmit={handlerLoginSubmit}>
-                        <TextField onChange={handlerToOnchange} sx={{ width: '75%', m: 1 }} id="standard-basic" name="email" label="Your Email" variant="standard" />
-                        <TextField onChange={handlerToOnchange} sx={{ width: '75%', m: 1 }} id="standard-basic" name="password" type="password" label="Password" variant="standard" />
+                        <TextField onBlur={handlerToBlur} sx={{ width: '75%', m: 1 }} id="standard-basic" name="email" label="Your Email" variant="standard" />
+                        <TextField onBlur={handlerToBlur} sx={{ width: '75%', m: 1 }} id="standard-basic" name="password" type="password" label="Password" variant="standard" />
                         <Button type="submit" sx={{ color: '#ffff', backgroundImage: "linear-gradient(to right,#18D2B5, #11CFE3)", padding: "6px 22px", width: '75%', m: 1 }} >Login</Button>
 
                         <NavLink to="/register" style={{ textDecoration: 'none' }}> <Button type="text" sx={{ color: "#11CFE3", width: '75%', m: 1, fontSize: '14px' }} >NEW USER? PLEASE REGISTER</Button></NavLink>
                     </form>
+                    <Button onClick={handlerGooglelogin} sx={{ color: '#ffff', backgroundImage: "linear-gradient(to right,#18D2B5, #11CFE3)", padding: "6px 22px", width: '75%', m: 1 }} >Login With Google</Button>
                     {isLoading && <CircularProgress />}
                     {
                         user?.email && <Alert severity="success">

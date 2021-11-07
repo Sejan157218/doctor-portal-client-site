@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import initializationFirebase from "../Firebase/firebase.init";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, updateProfile, signOut } from "firebase/auth";
 
 initializationFirebase()
 
 const useFirebase = () => {
     const [user, setUser] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    const [authError,setAuthError] =useState('');
+    const [authError, setAuthError] = useState('');
 
     const auth = getAuth();
-
+    const googleProvider = new GoogleAuthProvider();
     // handler to register
-    const handlerRegisterToEmail = (email, password) => {
+    const handlerRegisterToEmail = (email, password, name, history) => {
         setIsLoading(true)
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+                const newUser = { email: email, displayName: name }
                 const user = userCredential.user;
-                setUser(user);
+                setUser(newUser);
+                updateProfile(auth.currentUser, {
+                    displayName: name,
+                }).then(() => {
+                }).catch((error) => {
+                });
+                history.push('/')
                 setAuthError('')
             })
             .catch((error) => {
@@ -27,7 +34,7 @@ const useFirebase = () => {
     }
 
     // handler to login with email
-    const handlerLoginWithEmail = (email, password,location, history) => {
+    const handlerLoginWithEmail = (email, password, location, history) => {
         setIsLoading(true)
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
@@ -39,6 +46,22 @@ const useFirebase = () => {
                 setAuthError(error.message);
             })
             .finally(() => setIsLoading(false));
+    }
+    // google sign in
+    const handlerToGoogleLogin = (location, history) => {
+        setIsLoading(true)
+        signInWithPopup(auth, googleProvider)
+            .then((result) => {
+                // const credential = GoogleAuthProvider.credentialFromResult(result);
+                // const token = credential.accessToken;
+                const user = result.user;
+                const destination = location?.state?.from || "/";
+                history.replace(destination);
+                setAuthError('');
+                // ...
+            }).catch((error) => {
+                setAuthError(error.message);
+            }).finally(() => setIsLoading(false));
     }
 
     // Logout for email pass
@@ -71,6 +94,7 @@ const useFirebase = () => {
         user,
         handlerRegisterToEmail,
         handlerLoginWithEmail,
+        handlerToGoogleLogin,
         logout,
         authError,
         isLoading,
