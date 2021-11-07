@@ -15,9 +15,10 @@ import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Grid } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import Calendar from '../../Share/Calendar/Calendar';
 import AppoinmentsList from '../AppoinmentsList/AppoinmentsList';
+import { NavLink } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -33,6 +34,7 @@ function DashBoard(props) {
     const drawer = (
         <div>
             <Toolbar />
+            <NavLink style={{ textDecoration: "none", color: "" }} to="/appointment"> <Button color="inherit">Appointment</Button></NavLink>
             <Divider />
             <List>
                 {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
