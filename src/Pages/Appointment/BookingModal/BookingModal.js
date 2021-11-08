@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Button, TextField } from '@mui/material';
@@ -20,7 +19,7 @@ const style = {
 };
 
 const BookingModal = ({ book, openBooking, handleBookingClose, setBookingSuccess, date }) => {
-    const { name, time, space } = book;
+    const { name, time } = book;
     const { user } = useAuth();
     const initialInfo = { patientName: user?.displayName, email: user?.email, phone: '' };
     const [booking, setBooking] = useState(initialInfo);
@@ -44,7 +43,7 @@ const BookingModal = ({ book, openBooking, handleBookingClose, setBookingSuccess
             serviceName: name,
             date: date.toLocaleDateString(),
         }
-        fetch('http://localhost:9000/appointments', {
+        fetch('https://whispering-garden-01955.herokuapp.com/appointments', {
             method: "POST",
             headers: {
                 'content-type': "application/json"

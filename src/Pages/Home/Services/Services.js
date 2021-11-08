@@ -39,7 +39,7 @@ const Services = () => {
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
           {services.map(service => (
             <Grid item xs={4} sm={4} md={4}>
-              <Service service={service}></Service>
+              <Service key={service?.name} service={service}></Service>
             </Grid>
           ))}
         </Grid>

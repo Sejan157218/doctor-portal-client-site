@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import initializationFirebase from "../Firebase/firebase.init";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, getIdToken, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, updateProfile, signOut } from "firebase/auth";
 
@@ -21,7 +21,7 @@ const useFirebase = () => {
                 const newUser = { email: email, displayName: name }
                 setUser(newUser);
                 saveUser(email, name, 'POST')
-                const user = userCredential.user;
+
                 updateProfile(auth.currentUser, {
                     displayName: name,
                 }).then(() => {
@@ -79,7 +79,7 @@ const useFirebase = () => {
     // save user
     const saveUser = (email, displayName, method) => {
         const users = { email, displayName };
-        fetch('http://localhost:9000/users', {
+        fetch('https://whispering-garden-01955.herokuapp.com/users', {
             method: method,
             headers: {
                 'content-type': 'application/json'
@@ -91,10 +91,9 @@ const useFirebase = () => {
 
     // is Admin
     useEffect(() => {
-        fetch(`http://localhost:9000/users/${user.email}`)
+        fetch(`https://whispering-garden-01955.herokuapp.com/users/${user.email}`)
             .then(res => res.json())
             .then(data => {
-                console.log(data.admin);
                 setIsAdmin(data.admin)
             })
     }, [user.email])
@@ -115,7 +114,7 @@ const useFirebase = () => {
             setIsLoading(false)
         });
         return () => unsubscribed;
-    }, []);
+    }, [auth]);
 
     return {
         user,

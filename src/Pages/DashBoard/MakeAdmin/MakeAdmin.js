@@ -13,7 +13,7 @@ const MakeAdmin = () => {
 
     const handlerToSubmit = e => {
         const user = { email };
-        fetch('http://localhost:9000/users/admin', {
+        fetch('https://whispering-garden-01955.herokuapp.com/users/admin', {
             method: "PUT",
             headers: {
                 'authorization': `Bearer ${adminToken}`,
