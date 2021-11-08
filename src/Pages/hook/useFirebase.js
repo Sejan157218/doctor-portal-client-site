@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import initializationFirebase from "../Firebase/firebase.init";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, updateProfile, signOut } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, getIdToken, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, updateProfile, signOut } from "firebase/auth";
 
 initializationFirebase()
 
@@ -8,7 +8,8 @@ const useFirebase = () => {
     const [user, setUser] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [authError, setAuthError] = useState('');
-    const [isAdmin, setIsAdmin] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [adminToken, setAdminToken] = useState('')
 
     const auth = getAuth();
     const googleProvider = new GoogleAuthProvider();
@@ -18,16 +19,16 @@ const useFirebase = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const newUser = { email: email, displayName: name }
+                setUser(newUser);
                 saveUser(email, name, 'POST')
                 const user = userCredential.user;
-                setUser(newUser);
                 updateProfile(auth.currentUser, {
                     displayName: name,
                 }).then(() => {
                 }).catch((error) => {
                 });
-                history.push('/')
                 setAuthError('')
+                history.push('/')
             })
             .catch((error) => {
                 setAuthError(error.message)
@@ -54,14 +55,11 @@ const useFirebase = () => {
         setIsLoading(true)
         signInWithPopup(auth, googleProvider)
             .then((result) => {
-                // const credential = GoogleAuthProvider.credentialFromResult(result);
-                // const token = credential.accessToken;
                 const user = result.user;
                 saveUser(user.email, user.displayName, 'PUT')
                 const destination = location?.state?.from || "/";
                 history.replace(destination);
                 setAuthError('');
-                // ...
             }).catch((error) => {
                 setAuthError(error.message);
             }).finally(() => setIsLoading(false));
@@ -93,16 +91,23 @@ const useFirebase = () => {
 
     // is Admin
     useEffect(() => {
-        fetch(`http://localhost:9000/users/${user?.email}`)
+        fetch(`http://localhost:9000/users/${user.email}`)
             .then(res => res.json())
-            .then(data => setIsAdmin(data.admin))
-    }, [user?.email])
+            .then(data => {
+                console.log(data.admin);
+                setIsAdmin(data.admin)
+            })
+    }, [user.email])
 
     // onAuthStateChanged
     useEffect(() => {
         const unsubscribed = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setUser(user)
+                getIdToken(user)
+                    .then(idToken => {
+                        setAdminToken(idToken)
+                    })
             }
             else {
                 setUser({})
@@ -112,13 +117,13 @@ const useFirebase = () => {
         return () => unsubscribed;
     }, []);
 
-
     return {
         user,
         handlerRegisterToEmail,
         handlerLoginWithEmail,
         handlerToGoogleLogin,
         logout,
+        adminToken,
         isAdmin,
         authError,
         isLoading,

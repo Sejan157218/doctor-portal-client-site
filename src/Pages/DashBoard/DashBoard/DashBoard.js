@@ -16,7 +16,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
-
 import { NavLink } from 'react-router-dom';
 import {
     Switch,
@@ -24,9 +23,10 @@ import {
     useRouteMatch
 } from "react-router-dom";
 import DashBoardHome from '../DashBoardHome/DashBoardHome';
-import MakeDoctor from '../MakeDoctor/MakeDoctor';
+import MakeAdmin from '../MakeAdmin/MakeAdmin';
 import AddDoctor from '../AddDoctor/AddDoctor';
 import useAuth from '../../hook/useAuth';
+import AdminRoute from '../AdminRoute/AdminRoute';
 
 const drawerWidth = 240;
 
@@ -131,20 +131,18 @@ function DashBoard(props) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                <Typography paragraph>
-                    <Switch>
-                        <Route exact path={path}>
-                            <DashBoardHome date={date} setDate={setDate} />
-                        </Route>
-                        <Route path={`${path}/makeadmin`}>
-                            <MakeDoctor />
-                        </Route>
-                        <Route path={`${path}/adddoctor`}>
-                            <AddDoctor />
-                        </Route>
-                    </Switch>
 
-                </Typography>
+                <Switch>
+                    <Route exact path={path}>
+                        <DashBoardHome date={date} setDate={setDate} />
+                    </Route>
+                    <AdminRoute path={`${path}/makeadmin`}>
+                        <MakeAdmin />
+                    </AdminRoute>
+                    <AdminRoute path={`${path}/adddoctor`}>
+                        <AddDoctor />
+                    </AdminRoute>
+                </Switch>
 
             </Box>
         </Box >

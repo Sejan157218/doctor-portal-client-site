@@ -9,12 +9,16 @@ import Paper from '@mui/material/Paper';
 import useAuth from '../../hook/useAuth';
 
 const AppoinmentsList = ({ date }) => {
-    const { user } = useAuth();
+    const { user, adminToken } = useAuth();
     const [appointments, setAppointments] = useState([]);
 
     useEffect(() => {
         const url = `http://localhost:9000/appointments?email=${user?.email}&date=${date}`
-        fetch(url)
+        fetch(url, {
+            headers: {
+                'authorization': `Bearer ${adminToken}`
+            }
+        })
             .then(res => res.json())
             .then(data => setAppointments(data))
     }, [date])

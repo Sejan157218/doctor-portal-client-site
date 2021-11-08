@@ -1,26 +1,35 @@
-import { Button, TextField } from '@mui/material';
+import { Alert, Button, TextField } from '@mui/material';
 import React, { useState } from 'react';
-
-const MakeDoctor = () => {
+import useAuth from '../../hook/useAuth';
+const MakeAdmin = () => {
+    const [success, setSuccess] = useState(false);
     const [email, setEmail] = useState('');
+    const { adminToken } = useAuth()
 
 
     const handlerOnBlur = e => {
         setEmail(e.target.value);
     }
 
-    const handlerToSubmit = () => {
+    const handlerToSubmit = e => {
         const user = { email };
         fetch('http://localhost:9000/users/admin', {
             method: "PUT",
             headers: {
-                'content-type': 'application/json'
+                'authorization': `Bearer ${adminToken}`,
+                'content-type': 'application/json',
             },
             body: JSON.stringify(user),
         }).then(res => res.json())
             .then(data => {
                 console.log(data);
+                if (data.modifiedCount) {
+
+                    setSuccess(true)
+                }
+
             })
+        e.preventDefault()
     }
     return (
         <div>
@@ -32,8 +41,9 @@ const MakeDoctor = () => {
                     variant="outlined" />
                 <Button type="submit" variant="contained">Make Admin</Button>
             </form>
+            {success && <Alert severity="success">Made Admin successfully!</Alert>}
         </div>
     );
 };
 
-export default MakeDoctor;
+export default MakeAdmin;
